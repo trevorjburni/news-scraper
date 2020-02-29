@@ -13,7 +13,7 @@ module.exports = function(router) {
         res.render("saved");
     });
 
-    router.get("api/fetch", function(req, res) {
+    router.get("/api/fetch", function(req, res) {
         headlinesController.fetch(function(err, docs) {
             if (!docs || docs.insertedCount === 0) {
                 res.json({
@@ -53,6 +53,12 @@ module.exports = function(router) {
         }
 
         notesController.get(query, function(err, data){
+            res.json(data);
+        });
+    });
+
+    router.patch("/api/headlines", function(req,res) {
+        headlinesController.update(req.body, function(err, data) {
             res.json(data);
         });
     });

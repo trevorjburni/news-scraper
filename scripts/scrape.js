@@ -11,8 +11,41 @@ var scrape = function (cb) {
 
         $(".article").each(function (i, element) {
 
-            var link = $(this).children("a").attr("href");
-            console.log(link);
+            if (i < 20) {
+                return
+            } else {
+
+                const articleDiv = $(this).children(".info").children().children(".title").children("a");
+                let link = articleDiv.attr("href");
+                const title = articleDiv.text().trim();
+
+                if (link && title) {
+                    console.log("title: " + title);
+                    console.log("link: " + link);
+
+                    if (!link.includes("http:")) {
+                       link = "https:" + link; 
+                    };
+
+                    axios.get(link).then(function (response2) {
+
+                        const $ = cheerio.load(response2.data);
+
+                        let summary = $("p.speakable").text();
+
+                        if (!summary) {
+                            summary = "Summary Not Available";
+                        };
+                        console.log("summary: " + summary);
+
+
+                    });
+
+                } else {
+                    console.log("Link and Title not found");
+                }
+            }
+
         });
         cb(articles)
     });
