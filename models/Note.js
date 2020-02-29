@@ -1,11 +1,11 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 // Save a reference to the Schema contructor
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 // Using the Schema constructor, create a new UserSchema object
 // This is similar to a Sequelize model
-var noteSchema = new Schema({
+const noteSchema = new Schema({
     _headlineId: {
         type: Schema.Types.ObjectId,
         ref: "Headline"
@@ -14,6 +14,6 @@ var noteSchema = new Schema({
     noteBody: String
 });
 
-var Note = mongoose.model("Note", noteSchema);
+const Note = mongoose.model("Note", noteSchema);
 
 module.exports = Note;

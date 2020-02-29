@@ -1,4 +1,4 @@
-var Note = require("../models/Note");
+const Note = require("../models/Note");
 
 module.exports = {
     get: function(data, cb) {
@@ -7,7 +7,7 @@ module.exports = {
         }, cb);
     },
     save: function(data, cb) {
-        var newNote = {
+        const newNote = {
             _headlineId: data._id,
             noteText: data.noteText
         };

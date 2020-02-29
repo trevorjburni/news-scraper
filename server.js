@@ -1,12 +1,12 @@
 // Require in dependancies
-var express = require("express");
-var expressHandlebars = require("express-handlebars");
-var mongoose = require("mongoose");
+const express = require("express");
+const expressHandlebars = require("express-handlebars");
+const mongoose = require("mongoose");
 
-var PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Initialize Express
-var app = express();
+const app = express();
 
 // Require in routes file
 require("./config/routes")(app);
@@ -23,7 +23,7 @@ app.engine("handlebars", expressHandlebars({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 mongoose.connect(MONGODB_URI);
 

@@ -1,11 +1,11 @@
-var scrape = require("../scripts/scrape");
+const scrape = require("../scripts/scrape");
 
-var Headline = require("../models/Headline");
+const Headline = require("../models/Headline");
 
 module.exports = {
     fetch: function(cb) {
         scrape(function(data) {
-            var articles = data;
+            const articles = data;
             for (var i=0; i < articles.length; i++) {
                 articles[i].saved = false;
             }
