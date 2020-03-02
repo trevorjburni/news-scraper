@@ -2,52 +2,63 @@
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-var scrape = function (cb) {
+const Headline = require("../models/Headline");
+
+var scrape = function (message, err, count) {
     axios.get("https://www.foxnews.com/").then(function (response) {
-
-        var $ = cheerio.load(response.data);
-
-        var articles = [];
+        const $ = cheerio.load(response.data);
 
         $(".article").each(function (i, element) {
-
-            if (i < 20) {
-                return
-            } else {
 
                 const articleDiv = $(this).children(".info").children().children(".title").children("a");
                 let link = articleDiv.attr("href");
                 const title = articleDiv.text().trim();
 
                 if (link && title) {
-                    console.log("title: " + title);
-                    console.log("link: " + link);
-
+                    // Add https to the link if it doesn't contain it.
                     if (!link.includes("http:")) {
-                       link = "https:" + link; 
+                        link = "https:" + link;
                     };
-
                     axios.get(link).then(function (response2) {
-
-                        const $ = cheerio.load(response2.data);
-
-                        let summary = $("p.speakable").text();
-
+                        const $2 = cheerio.load(response2.data);
+                        let summary = $2("p.speakable").text();
                         if (!summary) {
                             summary = "Summary Not Available";
                         };
-                        console.log("summary: " + summary);
-
-
+                        // console.log("title: " + title);
+                        // console.log("link: " + link);
+                        // console.log("summary: " + summary);
+                        if (summary == undefined) {
+                            return;
+                        } else {
+                            var dataToAdd = {
+                                link: link,
+                                summary: summary,
+                                title: title,
+                                saved: false
+                            };
+                            console.log("dataToAdd: " + dataToAdd.link);
+                            Headline.create(dataToAdd)
+                            .then(function(dbArticle) {
+                                console.log(dbArticle);
+                                count ++;
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            })
+                        }
+                    }).catch(error => {
+                        if (error) {
+                            console.log(error.response)
+                        }
                     });
-
                 } else {
                     console.log("Link and Title not found");
                 }
-            }
-
         });
-        cb(articles)
+        message("scrape compete");
+        err(err);
+        count(count);
     });
 };
 

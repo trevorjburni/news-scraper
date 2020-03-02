@@ -14,15 +14,15 @@ module.exports = function(router) {
     });
 
     router.get("/api/fetch", function(req, res) {
-        headlinesController.fetch(function(err, docs) {
-            if (!docs || docs.insertedCount === 0) {
+        headlinesController.fetch(function(err, count) {
+            if (!count || count === 0) {
                 res.json({
                     message: "No new articles, Check back later."
                 });
             }
             else {
                 res.json({
-                    message: "Added " + docs.insertedCount + " new articles!"
+                    message: "Added " + count + " new articles!"
                 });
             }
         });

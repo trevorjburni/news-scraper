@@ -21,8 +21,6 @@ const headlineSchema = new Schema({
         type: String,
         required: true
     },
-
-    date: String,
     saved: {
         type: Boolean,
         default: false

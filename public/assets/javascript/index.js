@@ -2,7 +2,8 @@ $(document).ready(function() {
 
     var articleContainer = $(".article-container");
     $(document).on("click", ".scrape-new", articleScrape);
-    $(document).on("click", ".btn-save", articleSave);
+    $(document).on("click", ".save", articleSave);
+    $(document).on("click", ".clear-old", clearArticles);
 
     initialize();
 
@@ -36,7 +37,7 @@ $(document).ready(function() {
             "<div class='panel panel-default'>",
             "<div class='panel-heading'>",
             "<h3>",
-            article.headline,
+            article.title,
             "<a class='btn btn-success save'>",
             "Save Article",
             "</a>",
@@ -68,12 +69,14 @@ $(document).ready(function() {
 
     function articleSave() {
 
+        console.log("saved");
+
         const articleToSave = $(this).parents(".panel").data();
         articleToSave.saved = true;
 
         // ajax call
         $.ajax({
-            method: "PATCH",
+            method: "patch",
             url: "/api/headlines",
             data: articleToSave
         })
@@ -85,13 +88,21 @@ $(document).ready(function() {
     }
 
     function articleScrape() {
-        $.ajax({
-            method: "GET",
-            url: "/api/fetch"
-        })
+        $.get("/api/fetch")
         .then(function(data) {
             initialize();
             alert(data.message);
         });
+    }
+
+    function clearArticles() {
+        console.log("delete button clicked");
+        $.ajax({
+            method: "delete",
+            url: "/api/headlines",
+        })
+        .then(function() {
+            initialize();
+        })
     }
 });
